@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El poder de la red AgroValle</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+
+        /* --- ESTILOS DE IMPRESIÓN PARA PDF --- */
+        @media print {
+            /* Forzar la impresión de colores y fondos */
+            body {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                background-color: #fff !important;
+                color: #000 !important;
+            }
+
+
+            /* Asegurar que los bloques de color se mantengan sin romper página */
+            section {
+                break-inside: avoid;
+            }
+
+            /* Asegurar que los contenedores de texto tengan un fondo blanco limpio si están sobre un color */
+            .bg-agroMaiz\/10, .bg-agroAzul\/10, .bg-agroNaranja\/10 {
+                background-color: #fff !important;
+                border: 1px solid #ddd;
+            }
+            .bg-agroMaiz\/10 h2, .bg-agroAzul\/10 h2, .bg-agroNaranja\/10 h2 {
+                color: #000; /* Asegurar texto legible */
+            }
+
+            /* Ajustar el contenedor del mapa para que solo muestre las etiquetas si el iframe está oculto */
+            .relative.h-96 {
+                height: auto !important;
+                min-height: 150px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+                border: 1px dashed #aaa !important;
+            }
+            .relative.h-96 .z-20 {
+                position: static !important;
+                display: flex;
+                gap: 1rem;
+                flex-wrap: wrap;
+                justify-content: center;
+                align-items: center;
+            }
+            .relative.h-96 .z-20 > div {
+                position: static !important;
+                transform: none !important;
+            }
+        }
+        /* --- FIN ESTILOS DE IMPRESIÓN --- */
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        agroVerde: '#3A8F3A',
+                        agroMaiz: '#F2C94C',
+                        agroNaranja: '#E8922E',
+                        agroAzul: '#3B82F6',
+                    },
+                    fontFamily: {
+                        sans: ['Open Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-100 font-sans text-gray-800">
+
+    <main class="mx-auto max-w-7xl">
+
+        <section class="relative flex items-center justify-center h-[60vh] min-h-[400px] text-white text-center bg-cover bg-center" style="background-image: url('https://www.losagusti.com/fotos_noticias/1915-CAMPO-PRODUCTORES.jpg');">
+            <div class="absolute inset-0 bg-agroVerde" style="opacity: 0.60;"></div>
+            <div class="relative z-10 p-8">
+                <span class="text-6xl" role="img" aria-label="Plant sprout"></span>
+                <h1 class="text-4xl md:text-6xl font-bold mt-4 mb-2 shadow-text">
+                    El poder de la red AgroValle
+                </h1>
+                <p class="text-xl md:text-2xl font-light max-w-3xl">
+                    Productores, pymes y cooperativas unidas para producir mejor y generar trabajo digno
+                </p>
+            </div>
+        </section>
+
+        <section class="bg-agroMaiz/10 p-6 md:p-10 my-12 rounded-lg shadow-lg">
+            <div class="grid md:grid-cols-2 gap-8 items-center">
+                <div>
+                    <h2 class="text-3xl font-bold text-agroNaranja mb-4">Cómo empezó (2023)</h2>
+                    <blockquote class="text-xl italic text-gray-700 border-l-4 border-agroNaranja pl-4 py-2 mb-6">
+                        “El programa acompañó a productores de Monteros, Famaillá y Lules”
+                    </blockquote>
+                    <p class="mb-4 text-gray-600">El primer paso fue conectar a los actores clave del territorio:</p>
+                    <ul class="space-y-3">
+                        <li class="flex items-start text-lg">
+                            <span class="text-2xl mr-3" role="img" aria-label="Location pin">📍</span>
+                            <div>
+                                <h3 class="font-semibold">Identificación de productores</h3>
+                                <p class="text-gray-600">Mapeo de productores familiares en la zona</p>
+                            </div>
+                        </li>
+                        <li class="flex items-start text-lg">
+                            <span class="text-2xl mr-3" role="img" aria-label="Handshake">🤝</span>
+                            <div>
+                                <h3 class="font-semibold">Contacto con cooperativas</h3>
+                                <p class="text-gray-600">Vinculación con pymes y cooperativas locales</p>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="relative bg-white p-6 rounded-lg shadow-inner h-96 min-h-[300px] border-2 border-agroMaiz/50 overflow-hidden">
+                    <span class="absolute top-4 left-4 text-sm font-semibold text-gray-500 z-30 bg-white/70 px-2 rounded-sm">Mapa Conceptual de Zonas Clave</span>
+                    
+                    <!-- IFRAME: Full size, centered map -->
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d227456.05666588646!2d-65.51798842200188!3d-27.03013795825691!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1ses-419!2sar!4v1763303927441!5m2!1ses-419!2sar" 
+                            class="absolute inset-0 w-full h-full" 
+                            style="border:0;" 
+                            allowfullscreen="" 
+                            loading="lazy" 
+                            referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    
+                    <!-- Conceptual Map Labels - Overlaid on the map -->
+                    <div class="relative w-full h-full z-20 pointer-events-none"> 
+                        <!-- Monteros (Bottom Left) -->
+                        <div class="absolute bottom-1/4 left-1/4 transform -translate-x-1/2 translate-y-1/2 bg-agroMaiz border-2 border-agroNaranja text-gray-800 font-semibold px-4 py-2 rounded-lg shadow-xl z-20 pointer-events-auto">
+                            Monteros
+                        </div>
+                        <!-- Famaillá (Center) - Remains the same -->
+                        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-agroMaiz border-2 border-agroNaranja text-gray-800 font-semibold px-4 py-2 rounded-lg shadow-xl z-20 pointer-events-auto">
+                            Famaillá
+                        </div>
+                        <!-- Lules (Top Right) -->
+                        <div class="absolute top-1/4 right-1/4 transform translate-x-1/2 -translate-y-1/2 bg-agroMaiz border-2 border-agroNaranja text-gray-800 font-semibold px-4 py-2 rounded-lg shadow-xl z-20 pointer-events-auto">
+                            Lules
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="my-16 px-4">
+            <h2 class="text-3xl font-bold text-agroVerde text-center mb-10">
+                5 pasos para armar una red local de producción responsable
+            </h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-agroVerde text-center">
+                    <span class="text-4xl" role="img" aria-label="Magnifying glass">🔍</span>
+                    <h3 class="text-lg font-semibold my-2">Diagnosticar de forma participativa</h3>
+                    <p class="text-gray-600 text-sm">Relevamiento en territorio</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-agroVerde text-center">
+                    <span class="text-4xl" role="img" aria-label="Mortar board">🎓</span>
+                    <h3 class="text-lg font-semibold my-2"> Capacitar en el campo</h3>
+                    <p class="text-gray-600 text-sm">Formación práctica y corta</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-agroVerde text-center">
+                    <span class="text-4xl" role="img" aria-label="Notepad">📝</span>
+                    <h3 class="text-lg font-semibold my-2"> Registrar la información básica</h3>
+                    <p class="text-gray-600 text-sm">Organización simple</p>
+                </div>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-agroVerde text-center">
+                    <span class="text-4xl" role="img" aria-label="Link">🔗</span>
+                    <h3 class="text-lg font-semibold my-2">Vincular a los compradores</h3>
+                    <p class="text-gray-600 text-sm">Vinculación directa</p>
+                </div
+                
+                <div class="bg-white p-6 rounded-lg shadow-md border-t-4 border-agroVerde text-center sm:col-span-2 md:col-span-1 lg:col-span-1">
+                    <span class="text-4xl" role="img" aria-label="Megaphone">📣</span>
+                    <h3 class="text-lg font-semibold my-2">Difundir los resultados</h3>
+                    <p class="text-gray-600 text-sm">Visibilización del trabajo</p>
+                </div>
+            </div>
+        </section>
+        
+        <section class="my-12 bg-agroAzul/10 p-6 md:p-10 rounded-lg shadow-lg" style="background-image: url('https://placehold.co/1200x600/aaccf0/FFFFFF?text=Equipo+Trabajando'); background-size: cover; background-position: center; background-blend-mode: multiply;">
+            <div class="bg-white/90 p-8 rounded-lg backdrop-blur-sm">
+                <h2 class="text-3xl font-bold text-agroAzul text-center mb-4">
+                    “Gracias al trabajo en red”
+                </h2>
+                <p class="text-center text-gray-700 max-w-3xl mx-auto mb-8">
+                    La red AgroValle generó beneficios concretos para los participantes. Un análisis del impacto del programa destaca cuatro áreas principales de mejora, mostrando un progreso significativo en la organización y la rentabilidad.
+                </p>
+                
+                <div class="grid md:grid-cols-2 gap-8 items-center">
+                    <div class="chart-container">
+                        <canvas id="resultadosChart"></canvas>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-white/80 p-5 rounded-lg shadow-md border-l-4 border-agroAzul">
+                            <span class="text-3xl" role="img" aria-label="Calendar">📅</span>
+                            <h3 class="text-lg font-semibold mt-2">Mayor organización</h3>
+                            <p class="text-gray-600">y planificación</p>
+                        </div>
+                        <div class="bg-white/80 p-5 rounded-lg shadow-md border-l-4 border-agroAzul">
+                            <span class="text-3xl" role="img" aria-label="Scales">⚖️</span>
+                            <h3 class="text-lg font-semibold mt-2">Acuerdos justos</h3>
+                            <p class="text-gray-600">a precios transparentes</p>
+                        </div>
+                        <div class="bg-white/80 p-5 rounded-lg shadow-md border-l-4 border-agroAzul">
+                            <span class="text-3xl" role="img" aria-label="Seedling">🌱</span>
+                            <h3 class="text-lg font-semibold mt-2">Temporadas laborales</h3>
+                            <p class="text-gray-600">más largas</p>
+                        </div>
+                        <div class="bg-white/80 p-5 rounded-lg shadow-md border-l-4 border-agroAzul">
+                            <span class="text-3xl" role="img" aria-label="Shopping cart">🛒</span>
+                            <h3 class="text-lg font-semibold mt-2">Más confianza</h3>
+                            <p class="text-gray-600">de compradores locales</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="my-12 bg-agroNaranja/10 p-6 md:p-10 rounded-lg shadow-lg">
+            <h2 class="text-3xl font-bold text-agroNaranja text-center mb-8">
+                Claves para replicar el modelo
+            </h2>
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <span class="text-4xl" role="img" aria-label="Heart">❤️</span>
+                    <h3 class="text-xl font-semibold my-2">Cercanía</h3>
+                    <p class="text-gray-600">con el territorio</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <span class="text-4xl" role="img" aria-label="Toolbox">🧰</span>
+                    <h3 class="text-xl font-semibold my-2">Herramientas simples</h3>
+                    <p class="text-gray-600">y accesibles</p>
+                </div>
+                <div class="bg-white p-6 rounded-lg shadow-md text-center">
+                    <span class="text-4xl" role="img" aria-label="Technician">👨‍🔧</span>
+                    <h3 class="text-xl font-semibold my-2">Acompañamiento</h3>
+                    <p class="text-gray-600">técnico y humano</p>
+                </div>
+            </div>
+            <blockquote class="mt-12 border-l-4 border-agroNaranja p-6 bg-white text-xl md:text-2xl italic text-gray-700 text-center max-w-3xl mx-auto shadow-md">
+                “El secreto está en trabajar juntos, con transparencia y constancia”
+            </blockquote>
+        </section>
+    </main>
+    
+    <footer class="text-center p-8 text-gray-500 text-sm">
+        <p>Infografía SPA creada como parte del proyecto AgroValle.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('resultadosChart');
+            if (!ctx) return;
+            
+            const chartLabels = [
+                ['Organización y', 'planificación'],
+                ['Acuerdos a', 'precios justos'],
+                ['Temporadas', 'laborales más', 'largas'],
+                ['Confianza de', 'compradores', 'locales']
+            ];
+
+            const chartData = {
+                labels: chartLabels,
+                datasets: [{
+                    label: 'Nivel de Impacto',
+                    data: [8, 9, 7.5, 8.5],
+                    backgroundColor: [
+                        '#3A8F3A',
+                        '#F2C94C',
+                        '#3B82F6',
+                        '#E8922E'
+                    ],
+                    borderColor: [
+                        '#3A8F3A',
+                        '#F2C94C',
+                        '#3B82F6',
+                        '#E8922E'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+
+            new Chart(ctx, {
+                type: 'bar',
+                data: chartData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 10,
+                            title: {
+                                display: true,
+                                text: 'Nivel de Impacto (1-10)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                autoSkip: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        title: {
+                            display: true,
+                            text: 'Impacto Percibido por Área',
+                            font: {
+                                size: 16
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                title: function(tooltipItems) {
+                                    const item = tooltipItems[0];
+                                    let label = item.chart.data.labels[item.dataIndex];
+                                    if (Array.isArray(label)) {
+                                      return label.join(' ');
+                                    } else {
+                                      return label;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
